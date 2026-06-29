@@ -1,17 +1,21 @@
 /**
  * 摸鱼助手 content script — the simulation engine.
  *
+ * Goal (see CONTEXT.md): "presence simulation" for the OBSERVATION CHANNEL =
+ * the on-screen image (screen share / shoulder-surfing, scenarios A/D). It
+ * makes the visible page look like someone is actively browsing.
+ *
  * Runs in every page (top frame). When enabled it:
  *   - smoothly auto-scrolls the page,
  *   - reverses / loops at the bottom,
  *   - takes random human-like pauses ("reading"),
- *   - dispatches subtle synthetic mousemove events,
- *   - requests a Screen Wake Lock so the display does not sleep.
+ *   - requests a Screen Wake Lock so the display does not sleep / show a
+ *     screensaver that would cover the scrolling page (a SAFEGUARD for the
+ *     scroll, not a standalone anti-screensaver feature).
  *
- * NOTE ON LIMITATIONS: A browser extension cannot move the operating-system
- * mouse cursor or directly reset the OS idle timer. The Wake Lock API is the
- * supported, reliable way for a page to keep the *screen* awake; scrolling and
- * synthetic events keep the page/site "active". See README for details.
+ * HARD LIMITS: A browser extension cannot move the real OS cursor and the
+ * scrolling produces no OS-level input, so this does NOT defeat OS-level
+ * activity monitors. It only makes the on-screen image look alive. See README.
  */
 (function () {
   "use strict";
@@ -27,7 +31,6 @@
   let running = false; // engine actively scrolling/looping
   let direction = 1; // 1 = down, -1 = up
   let scrollTimer = null;
-  let mouseTimer = null;
   let burstDeadline = 0; // timestamp at which the current scroll burst ends
   let wakeLock = null; // WakeLockSentinel | null
 
@@ -73,48 +76,6 @@
       /* ignore */
     }
     wakeLock = null;
-  }
-
-  // --- Synthetic mouse movement ---------------------------------------------
-  let mouseX = Math.floor(window.innerWidth / 2);
-  let mouseY = Math.floor(window.innerHeight / 2);
-
-  function dispatchMouseMove() {
-    if (!settings.mouseMove) return;
-    if (document.visibilityState !== "visible") return;
-
-    // Wander a little around the viewport.
-    mouseX = clamp(
-      mouseX + rand(-60, 60),
-      4,
-      Math.max(8, window.innerWidth - 4)
-    );
-    mouseY = clamp(
-      mouseY + rand(-40, 40),
-      4,
-      Math.max(8, window.innerHeight - 4)
-    );
-
-    const target =
-      document.elementFromPoint(mouseX, mouseY) || document.documentElement;
-    const evt = new MouseEvent("mousemove", {
-      view: window,
-      bubbles: true,
-      cancelable: true,
-      clientX: Math.round(mouseX),
-      clientY: Math.round(mouseY),
-      screenX: Math.round(mouseX),
-      screenY: Math.round(mouseY)
-    });
-    try {
-      (target || document).dispatchEvent(evt);
-    } catch (_) {
-      /* ignore */
-    }
-  }
-
-  function clamp(v, lo, hi) {
-    return Math.min(hi, Math.max(lo, v));
   }
 
   // --- Scroll loop -----------------------------------------------------------
@@ -181,14 +142,6 @@
     if (scrollTimer) clearTimeout(scrollTimer);
     step();
 
-    if (mouseTimer) clearInterval(mouseTimer);
-    if (settings.mouseMove) {
-      mouseTimer = window.setInterval(
-        dispatchMouseMove,
-        settings.mouseMoveMs || 4000
-      );
-    }
-
     acquireWakeLock();
   }
 
@@ -197,10 +150,6 @@
     if (scrollTimer) {
       clearTimeout(scrollTimer);
       scrollTimer = null;
-    }
-    if (mouseTimer) {
-      clearInterval(mouseTimer);
-      mouseTimer = null;
     }
     releaseWakeLock();
   }
@@ -246,10 +195,6 @@
       if (scrollTimer) {
         clearTimeout(scrollTimer);
         scrollTimer = null;
-      }
-      if (mouseTimer) {
-        clearInterval(mouseTimer);
-        mouseTimer = null;
       }
       running = false;
       wakeLock = null;

@@ -31,14 +31,10 @@
     pauseMinMs: 1500,
     pauseMaxMs: 5000,
 
-    // Synthetic mouse movement ---------------------------------------------
-    // Dispatch mousemove events inside the page to mimic cursor activity.
-    mouseMove: true,
-    // Milliseconds between synthetic mouse moves.
-    mouseMoveMs: 4000,
-
-    // Keep-awake ------------------------------------------------------------
-    // Request the Screen Wake Lock API to stop the display from sleeping.
+    // Keep-awake (supporting safeguard) ------------------------------------
+    // Request the Screen Wake Lock API so the display does not sleep and a
+    // screensaver does not cover the scrolling page. This is a safeguard for
+    // the auto-scroll, NOT a standalone anti-screensaver mechanism.
     wakeLock: true
   };
 

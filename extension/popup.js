@@ -19,7 +19,6 @@
     pauseMinValue: document.getElementById("pauseMinValue"),
     pauseMaxMs: document.getElementById("pauseMaxMs"),
     pauseMaxValue: document.getElementById("pauseMaxValue"),
-    mouseMove: document.getElementById("mouseMove"),
     wakeLock: document.getElementById("wakeLock"),
     humanize: document.getElementById("humanize"),
     reset: document.getElementById("reset")
@@ -53,7 +52,6 @@
     els.pauseMaxMs.value = settings.pauseMaxMs;
     els.pauseMaxValue.textContent = fmtSec(settings.pauseMaxMs);
 
-    els.mouseMove.checked = !!settings.mouseMove;
     els.wakeLock.checked = !!settings.wakeLock;
     els.humanize.checked = !!settings.humanize;
   }
@@ -95,9 +93,6 @@
   );
   els.pauseMaxMs.addEventListener("input", (e) =>
     update({ pauseMaxMs: Number(e.target.value) })
-  );
-  els.mouseMove.addEventListener("change", (e) =>
-    update({ mouseMove: e.target.checked })
   );
   els.wakeLock.addEventListener("change", (e) =>
     update({ wakeLock: e.target.checked })
