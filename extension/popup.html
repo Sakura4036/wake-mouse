@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>摸鱼助手</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-emoji" aria-hidden="true">☕️</span>
+        <div class="brand-text">
+          <h1>摸鱼助手</h1>
+          <p>自动滚动 · 防屏保</p>
+        </div>
+      </div>
+      <label class="switch" title="总开关">
+        <input type="checkbox" id="enabled" />
+        <span class="slider"></span>
+      </label>
+    </header>
+
+    <p class="status" id="status">已停止</p>
+
+    <section class="card">
+      <div class="row">
+        <label for="speed">滚动速度</label>
+        <span class="value" id="speedValue">2 px</span>
+      </div>
+      <input type="range" id="speed" min="1" max="12" step="1" />
+
+      <div class="row">
+        <label for="tickMs">平滑度（间隔越小越顺滑）</label>
+        <span class="value" id="tickValue">24 ms</span>
+      </div>
+      <input type="range" id="tickMs" min="8" max="80" step="2" />
+
+      <div class="row">
+        <label for="mode">到底部时</label>
+        <select id="mode">
+          <option value="bounce">来回滚动（推荐）</option>
+          <option value="loop">回到顶部循环</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row">
+        <label for="pauseChance">停顿概率（模拟阅读）</label>
+        <span class="value" id="pauseValue">35%</span>
+      </div>
+      <input type="range" id="pauseChance" min="0" max="100" step="5" />
+
+      <div class="row split">
+        <div>
+          <label for="pauseMinMs">停顿最短</label>
+          <span class="value" id="pauseMinValue">1.5 s</span>
+        </div>
+        <div>
+          <label for="pauseMaxMs">停顿最长</label>
+          <span class="value" id="pauseMaxValue">5.0 s</span>
+        </div>
+      </div>
+      <input type="range" id="pauseMinMs" min="0" max="10000" step="500" />
+      <input type="range" id="pauseMaxMs" min="500" max="20000" step="500" />
+    </section>
+
+    <section class="card toggles">
+      <label class="toggle-row">
+        <span>模拟鼠标移动</span>
+        <span class="mini-switch">
+          <input type="checkbox" id="mouseMove" />
+          <span class="mini-slider"></span>
+        </span>
+      </label>
+      <label class="toggle-row">
+        <span>保持屏幕常亮 (Wake Lock)</span>
+        <span class="mini-switch">
+          <input type="checkbox" id="wakeLock" />
+          <span class="mini-slider"></span>
+        </span>
+      </label>
+      <label class="toggle-row">
+        <span>拟人化抖动</span>
+        <span class="mini-switch">
+          <input type="checkbox" id="humanize" />
+          <span class="mini-slider"></span>
+        </span>
+      </label>
+    </section>
+
+    <footer class="app-footer">
+      <button id="reset" class="link-btn" type="button">恢复默认</button>
+      <span class="hint">设置实时生效</span>
+    </footer>
+
+    <script src="defaults.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

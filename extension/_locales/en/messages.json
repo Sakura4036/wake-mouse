@@ -1,0 +1,8 @@
+{
+  "extDescription": {
+    "message": "Auto-scrolls the page and simulates human-like mouse activity with occasional pauses to keep the screen awake and avoid the screensaver."
+  },
+  "actionTitle": {
+    "message": "Anti-Idle Auto Scroller"
+  }
+}
