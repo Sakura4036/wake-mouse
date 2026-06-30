@@ -31,15 +31,39 @@
     pauseMinMs: 1500,
     pauseMaxMs: 5000,
 
-    // Synthetic mouse movement ---------------------------------------------
-    // Dispatch mousemove events inside the page to mimic cursor activity.
-    mouseMove: true,
-    // Milliseconds between synthetic mouse moves.
-    mouseMoveMs: 4000,
+    // Edge dwell — pause when reaching the very top/bottom before reversing,
+    // so a "bounce" does not look like a robotic instant flip. (ms)
+    edgeDwellMinMs: 1200,
+    edgeDwellMaxMs: 3500,
 
-    // Keep-awake ------------------------------------------------------------
-    // Request the Screen Wake Lock API to stop the display from sleeping.
-    wakeLock: true
+    // Short-page guard ------------------------------------------------------
+    // If the scrollable distance is below this many pixels the page is "too
+    // short": rapid back-and-forth would look obviously fake, so the engine
+    // idles (and re-checks, in case content lazy-loads) instead of bouncing.
+    minScrollPx: 160,
+
+    // Human takeover --------------------------------------------------------
+    // "off"     : never auto-stop on real user input.
+    // "instant" : any real input (mouse move / wheel / key / touch) takes over.
+    // "delayed" : only take over after the user is continuously active for
+    //             `takeoverDelayMs`, so an accidental nudge is ignored.
+    takeoverMode: "instant",
+    takeoverDelayMs: 3000,
+    // When taken over: if true, soft-pause and auto-resume after the user has
+    // been idle for `resumeIdleMs`. If false, hard-stop (flip the master off).
+    autoResume: true,
+    resumeIdleMs: 6000,
+
+    // Keep-awake (supporting safeguard) ------------------------------------
+    // Request the Screen Wake Lock API so the display does not sleep and a
+    // screensaver does not cover the scrolling page. This is a safeguard for
+    // the auto-scroll, NOT a standalone anti-screensaver mechanism.
+    wakeLock: true,
+
+    // Diagnostics -----------------------------------------------------------
+    // When true, the content script logs detailed state to the page console
+    // (prefixed "[摸鱼助手]") to help diagnose pages that "don't work".
+    debug: false
   };
 
   root.MOYU_DEFAULTS = DEFAULTS;

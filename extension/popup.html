@@ -66,21 +66,38 @@
       <input type="range" id="pauseMaxMs" min="500" max="20000" step="500" />
     </section>
 
+    <section class="card">
+      <div class="row">
+        <label for="takeoverMode">真人接管</label>
+        <select id="takeoverMode">
+          <option value="off">关闭</option>
+          <option value="instant">动一下就暂停</option>
+          <option value="delayed">持续操作超过 N 秒才暂停</option>
+        </select>
+      </div>
+
+      <div class="row" id="delayRow">
+        <label for="takeoverDelayMs">接管阈值（持续操作）</label>
+        <span class="value" id="delayValue">3.0 s</span>
+      </div>
+      <input type="range" id="takeoverDelayMs" min="1000" max="10000" step="500" />
+
+      <label class="toggle-row">
+        <span>离开后自动恢复</span>
+        <span class="mini-switch">
+          <input type="checkbox" id="autoResume" />
+          <span class="mini-slider"></span>
+        </span>
+      </label>
+
+      <div class="row" id="resumeRow">
+        <label for="resumeIdleMs">恢复等待（无操作）</label>
+        <span class="value" id="resumeValue">6.0 s</span>
+      </div>
+      <input type="range" id="resumeIdleMs" min="2000" max="30000" step="1000" />
+    </section>
+
     <section class="card toggles">
-      <label class="toggle-row">
-        <span>模拟鼠标移动</span>
-        <span class="mini-switch">
-          <input type="checkbox" id="mouseMove" />
-          <span class="mini-slider"></span>
-        </span>
-      </label>
-      <label class="toggle-row">
-        <span>保持屏幕常亮 (Wake Lock)</span>
-        <span class="mini-switch">
-          <input type="checkbox" id="wakeLock" />
-          <span class="mini-slider"></span>
-        </span>
-      </label>
       <label class="toggle-row">
         <span>拟人化抖动</span>
         <span class="mini-switch">
@@ -88,7 +105,34 @@
           <span class="mini-slider"></span>
         </span>
       </label>
+      <label class="toggle-row" title="申请 Screen Wake Lock，避免息屏/屏保盖住滚动画面">
+        <span>保持屏幕常亮（辅助）</span>
+        <span class="mini-switch">
+          <input type="checkbox" id="wakeLock" />
+          <span class="mini-slider"></span>
+        </span>
+      </label>
+      <label class="toggle-row" title="在网页控制台打印诊断日志，便于排查不生效的页面">
+        <span>调试日志（控制台）</span>
+        <span class="mini-switch">
+          <input type="checkbox" id="debug" />
+          <span class="mini-slider"></span>
+        </span>
+      </label>
     </section>
+
+    <section class="card diag">
+      <div class="diag-head">
+        <span>当前页面诊断</span>
+        <button id="refreshDiag" class="link-btn" type="button">刷新</button>
+      </div>
+      <div id="diagBody" class="diag-body">检测中…</div>
+    </section>
+
+    <p class="note">
+      仅让<strong>屏幕画面</strong>看起来有人在浏览（适合屏幕共享/旁人偷瞄）。
+      无法移动真实鼠标，也骗不过系统级监控。摸鱼标签页需保持前台可见。
+    </p>
 
     <footer class="app-footer">
       <button id="reset" class="link-btn" type="button">恢复默认</button>

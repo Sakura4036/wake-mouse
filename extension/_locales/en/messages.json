@@ -1,8 +1,8 @@
 {
   "extDescription": {
-    "message": "Auto-scrolls the page and simulates human-like mouse activity with occasional pauses to keep the screen awake and avoid the screensaver."
+    "message": "Auto-scrolls the current page with random pauses so the on-screen image looks actively browsed (for screen sharing / over-the-shoulder viewing). Optional Wake Lock as a safeguard. Cannot move the real cursor and does not fool OS-level monitors."
   },
   "actionTitle": {
-    "message": "Anti-Idle Auto Scroller"
+    "message": "Slack Helper · Auto-Scroll Presence"
   }
 }
